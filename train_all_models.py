@@ -18,6 +18,7 @@ RANDOM_SEED = 42
 EPOCHS = 50
 BATCH_SIZE = 32
 
+
 def extract_dataset_features(dataset_path: str):
     processor = AudioProcessor()
     X, y = [], []
@@ -37,11 +38,12 @@ def extract_dataset_features(dataset_path: str):
                     X.append(features)
                     y.append(emotion)
                     count += 1
-                
+
                 if count % 500 == 0:
                     print(f"Processed {count} files...")
 
     return np.array(X), np.array(y)
+
 
 def main():
     os.makedirs(MODELS_DIR, exist_ok=True)
@@ -56,7 +58,7 @@ def main():
         X, y = extract_dataset_features(DATASET_PATH)
         np.save("X.npy", X)
         np.save("y.npy", y)
-    
+
     print(f"Features: {X.shape}, Labels: {len(y)}")
 
     # 2. Preprocessing
@@ -86,20 +88,19 @@ def main():
         "lstm": (create_lstm_model, X_train_reshaped, X_test_reshaped, True),
         "gru": (create_gru_model, X_train_reshaped, X_test_reshaped, True),
         "cnn_lstm": (create_cnn_lstm_model, X_train_reshaped, X_test_reshaped, True),
-        
         # Machine Learning
         "rf": (create_rf_model, X_train_scaled, X_test_scaled, False),
         "svm": (create_svm_model, X_train_scaled, X_test_scaled, False),
         "gb": (create_gb_model, X_train_scaled, X_test_scaled, False),
         "knn": (create_knn_model, X_train_scaled, X_test_scaled, False),
-        "et": (create_et_model, X_train_scaled, X_test_scaled, False)
+        "et": (create_et_model, X_train_scaled, X_test_scaled, False),
     }
 
     results = {}
 
     for name, (model_func, X_tr, X_te, is_dl) in models_to_train.items():
         print(f"\n{'='*20} Training {name.upper()} {'='*20}")
-        
+
         if is_dl:
             # Deep Learning Training
             model = model_func(X_tr.shape[1], num_classes)
@@ -130,7 +131,7 @@ def main():
             save_path = os.path.join(MODELS_DIR, f"{name}_model.pkl")
             joblib.dump(model, save_path)
         
-        print(f"✅ {name.upper()} Test Accuracy: {acc:.4f}")
+        print(f"{name.upper()} Test Accuracy: {acc:.4f}")
         results[name] = acc
 
     print("\n" + "="*40)

@@ -70,7 +70,7 @@ def create_model(input_dim, num_classes):
 
 # MAIN TRAINING PIPELINE
 def main():
-    print("🎧 Extracting features from RAVDESS dataset...")
+    print("Extracting features from RAVDESS dataset...")
     X, y = extract_dataset_features(DATASET_PATH)
     print(f"Features extracted: {X.shape}, Labels: {len(y)}")
 
@@ -99,7 +99,7 @@ def main():
     early_stop = EarlyStopping(monitor='val_accuracy', patience=8, restore_best_weights=True)
 
     # Train
-    print("🚀 Training deep model...")
+    print("Training deep model...")
     history = model.fit(
         X_train_scaled, y_train,
         validation_data=(X_test_scaled, y_test),

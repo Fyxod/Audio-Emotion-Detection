@@ -172,7 +172,7 @@ def display_results(audio_path, model, scaler, model_type):
                     emotion, confidence, probs = predict_emotion(model, scaler, model_type, features)
                 
                 st.markdown("---")
-                st.markdown(f"## 🎯 Detected Emotion: {emotion.upper()}")
+                st.markdown(f"## Detected Emotion: {emotion.upper()}")
                 st.markdown(f"### Confidence: {confidence:.2%}")
                 st.markdown("---")
 
