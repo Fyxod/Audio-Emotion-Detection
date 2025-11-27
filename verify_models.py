@@ -18,7 +18,11 @@ MODELS = {
     "gb": {"file": "gb_model.pkl", "type": "ml"},
     "knn": {"file": "knn_model.pkl", "type": "ml"},
     "et": {"file": "et_model.pkl", "type": "ml"},
+    "rf_gb_et": {"file": "rf_gb_et_model.pkl", "type": "ml"},
+    "rf_svm_knn": {"file": "rf_svm_knn_model.pkl", "type": "ml"},
+    "gb_svm": {"file": "gb_svm_model.pkl", "type": "ml"},
 }
+
 
 def verify_models():
     print("Verifying models...")

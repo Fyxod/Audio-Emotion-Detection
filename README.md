@@ -19,7 +19,7 @@ End-to-end pipeline for detecting human emotions from speech recordings. The pro
 ## Project Highlights
 
 - Unified extraction pipeline (`audio_processor.AudioProcessor`) ensures identical features for training and inference.
-- Ten supervised learners (5 deep learning models + 5 classical ML baselines) trained with consistent splits and preprocessing for fair comparison.
+- Thirteen supervised learners (5 deep learning models + 5 classical ML baselines + 3 blended ensembles) trained with consistent splits and preprocessing for fair comparison.
 - Cached NumPy feature matrices (`X.npy`, `y.npy`) accelerate iterative experimentation.
 - Streamlit dashboard (`app.py`) handles arbitrary audio uploads, waveform/spectrogram visualizations, and probability breakdowns.
 - Dedicated verification script confirms that every serialized model and scaler can be loaded before deployment.
@@ -63,18 +63,21 @@ The feature vector is standardized with a single `StandardScaler` instance that 
 
 Each learner has a dedicated deep dive in `docs/models/*.md`:
 
-| Model                  | Type          | Documentation                                        |
-| ---------------------- | ------------- | ---------------------------------------------------- |
-| Multi-Layer Perceptron | Deep Learning | [`docs/models/mlp.md`](docs/models/mlp.md)           |
-| 1D CNN                 | Deep Learning | [`docs/models/cnn1d.md`](docs/models/cnn1d.md)       |
-| LSTM                   | Deep Learning | [`docs/models/lstm.md`](docs/models/lstm.md)         |
-| GRU                    | Deep Learning | [`docs/models/gru.md`](docs/models/gru.md)           |
-| CNN-LSTM Hybrid        | Deep Learning | [`docs/models/cnn_lstm.md`](docs/models/cnn_lstm.md) |
-| Random Forest          | Classical ML  | [`docs/models/rf.md`](docs/models/rf.md)             |
-| Support Vector Machine | Classical ML  | [`docs/models/svm.md`](docs/models/svm.md)           |
-| Gradient Boosting      | Classical ML  | [`docs/models/gb.md`](docs/models/gb.md)             |
-| K-Nearest Neighbors    | Classical ML  | [`docs/models/knn.md`](docs/models/knn.md)           |
-| Extra Trees            | Classical ML  | [`docs/models/et.md`](docs/models/et.md)             |
+| Model                        | Type          | Documentation                                            |
+| ---------------------------- | ------------- | -------------------------------------------------------- |
+| Multi-Layer Perceptron       | Deep Learning | [`docs/models/mlp.md`](docs/models/mlp.md)               |
+| 1D CNN                       | Deep Learning | [`docs/models/cnn1d.md`](docs/models/cnn1d.md)           |
+| LSTM                         | Deep Learning | [`docs/models/lstm.md`](docs/models/lstm.md)             |
+| GRU                          | Deep Learning | [`docs/models/gru.md`](docs/models/gru.md)               |
+| CNN-LSTM Hybrid              | Deep Learning | [`docs/models/cnn_lstm.md`](docs/models/cnn_lstm.md)     |
+| Random Forest                | Classical ML  | [`docs/models/rf.md`](docs/models/rf.md)                 |
+| Support Vector Machine       | Classical ML  | [`docs/models/svm.md`](docs/models/svm.md)               |
+| Gradient Boosting            | Classical ML  | [`docs/models/gb.md`](docs/models/gb.md)                 |
+| K-Nearest Neighbors          | Classical ML  | [`docs/models/knn.md`](docs/models/knn.md)               |
+| Extra Trees                  | Classical ML  | [`docs/models/et.md`](docs/models/et.md)                 |
+| RF + GB + ET (Soft Voting)   | Ensemble (ML) | [`docs/models/rf_gb_et.md`](docs/models/rf_gb_et.md)     |
+| RF + SVM + KNN (Soft Voting) | Ensemble (ML) | [`docs/models/rf_svm_knn.md`](docs/models/rf_svm_knn.md) |
+| GB + SVM (Soft Voting)       | Ensemble (ML) | [`docs/models/gb_svm.md`](docs/models/gb_svm.md)         |
 
 All deep models share identical training hyper-parameters (Adam optimizer, up to 50 epochs, batch size 32, EarlyStopping on `val_accuracy`, ModelCheckpoint). Classical models use scikit-learn defaults with minor tuning (number of estimators, depth, k, etc.).
 
@@ -134,7 +137,7 @@ streamlit run app.py
 - `models/scaler.pkl` – feature standardization parameters.
 - `models/label_encoder.pkl` – mapping between integer IDs and emotion strings.
 - `models/*_model.h5` – Keras models (MLP, CNN1D, LSTM, GRU, CNN-LSTM).
-- `models/*_model.pkl` – scikit-learn models (RF, SVM, GB, KNN, Extra Trees).
+- `models/*_model.pkl` – scikit-learn models (RF, SVM, GB, KNN, Extra Trees, and ensemble variants).
 - `X.npy`, `y.npy` – cached datasets to avoid repeated feature extraction; delete these if you need to reprocess the raw audio (e.g., after changing `AudioProcessor`).
 
 ## Troubleshooting & Tips

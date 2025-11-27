@@ -77,8 +77,12 @@ def main():
     joblib.dump(scaler, SCALER_PATH)
 
     # Reshaped data for DL models (samples, features, 1)
-    X_train_reshaped = X_train_scaled.reshape(X_train_scaled.shape[0], X_train_scaled.shape[1], 1)
-    X_test_reshaped = X_test_scaled.reshape(X_test_scaled.shape[0], X_test_scaled.shape[1], 1)
+    X_train_reshaped = X_train_scaled.reshape(
+        X_train_scaled.shape[0], X_train_scaled.shape[1], 1
+    )
+    X_test_reshaped = X_test_scaled.reshape(
+        X_test_scaled.shape[0], X_test_scaled.shape[1], 1
+    )
 
     # 3. Model Training
     models_to_train = {
@@ -94,6 +98,14 @@ def main():
         "gb": (create_gb_model, X_train_scaled, X_test_scaled, False),
         "knn": (create_knn_model, X_train_scaled, X_test_scaled, False),
         "et": (create_et_model, X_train_scaled, X_test_scaled, False),
+        "rf_gb_et": (create_rf_gb_et_ensemble, X_train_scaled, X_test_scaled, False),
+        "rf_svm_knn": (
+            create_rf_svm_knn_ensemble,
+            X_train_scaled,
+            X_test_scaled,
+            False,
+        ),
+        "gb_svm": (create_gb_svm_ensemble, X_train_scaled, X_test_scaled, False),
     }
 
     results = {}
@@ -105,24 +117,29 @@ def main():
             # Deep Learning Training
             model = model_func(X_tr.shape[1], num_classes)
             save_path = os.path.join(MODELS_DIR, f"{name}_model.h5")
-            
+
             callbacks = [
-                EarlyStopping(monitor='val_accuracy', patience=5, restore_best_weights=True),
-                ModelCheckpoint(save_path, monitor='val_accuracy', save_best_only=True, verbose=0)
+                EarlyStopping(
+                    monitor="val_accuracy", patience=5, restore_best_weights=True
+                ),
+                ModelCheckpoint(
+                    save_path, monitor="val_accuracy", save_best_only=True, verbose=0
+                ),
             ]
-            
+
             history = model.fit(
-                X_tr, y_train,
+                X_tr,
+                y_train,
                 validation_data=(X_te, y_test),
                 epochs=EPOCHS,
                 batch_size=BATCH_SIZE,
                 callbacks=callbacks,
-                verbose=1
+                verbose=1,
             )
-            
+
             loss, acc = model.evaluate(X_te, y_test, verbose=0)
-            model.save(save_path) # Ensure final save
-            
+            model.save(save_path)  # Ensure final save
+
         else:
             # Sklearn Training
             model = model_func()
@@ -130,15 +147,16 @@ def main():
             acc = model.score(X_te, y_test)
             save_path = os.path.join(MODELS_DIR, f"{name}_model.pkl")
             joblib.dump(model, save_path)
-        
+
         print(f"{name.upper()} Test Accuracy: {acc:.4f}")
         results[name] = acc
 
-    print("\n" + "="*40)
+    print("\n" + "=" * 40)
     print("FINAL RESULTS")
-    print("="*40)
+    print("=" * 40)
     for name, acc in sorted(results.items(), key=lambda x: x[1], reverse=True):
         print(f"{name.upper()}: {acc:.4f}")
+
 
 if __name__ == "__main__":
     main()
