@@ -11,6 +11,12 @@ Margin-based classifier that projects engineered acoustic features into an RBF k
 - 110 standardized descriptors from `AudioProcessor`.
 - No additional reshaping; relies on dense feature vectors.
 
+## Feature Set & Selection
+
+- **Count:** 110 features per sample.
+- **Composition:** MFCC/ΔMFCC statistics, chroma, spectral contrast, tonnetz, and global measures (ZCR, RMS, centroid, rolloff).
+- **Selection process:** The SVM uses the entire engineered feature space; there is no feature elimination or ranking prior to fitting because the RBF kernel handles high-dimensional representations well.
+
 ## Configuration
 
 - `sklearn.svm.SVC` with `kernel='rbf'` and probability estimates enabled (`probability=True`).

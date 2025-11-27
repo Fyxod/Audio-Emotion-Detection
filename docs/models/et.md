@@ -11,6 +11,12 @@ Extremely randomized trees ensemble that injects more randomness than Random For
 - 110 standardized engineered features from `AudioProcessor`.
 - No additional reshaping required.
 
+## Feature Set & Selection
+
+- **Count:** 110 handcrafted descriptors fed to every tree.
+- **Composition:** MFCC/ΔMFCC means & stds, chroma and spectral contrast stats, tonnetz descriptors, plus standalone ZCR, RMS, centroid, and rolloff metrics.
+- **Selection process:** Extra Trees trains on the full engineered feature vector; randomness is introduced via split selection, not by removing features ahead of time.
+
 ## Configuration
 
 - `ExtraTreesClassifier` with 200 estimators.

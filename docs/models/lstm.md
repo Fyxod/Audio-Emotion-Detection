@@ -11,6 +11,12 @@ Sequence model that captures long-range dependencies across the ordered engineer
 - Same 110-dimensional vector reshaped to `(features, 1)` per sample.
 - Features produced by `AudioProcessor.extract_features` and standardized via `models/scaler.pkl`.
 
+## Feature Set & Selection
+
+- **Count:** 110 ordered timesteps presented to the recurrent stack.
+- **Composition:** MFCC and ΔMFCC statistics, chroma energies, spectral contrast, tonnetz, plus holistic descriptors (ZCR, RMS, centroid, rolloff).
+- **Selection process:** No filter-based or model-based selection; all engineered statistics from `AudioProcessor` are preserved to let the LSTM learn its own relevance weighting.
+
 ## Architecture
 
 - Input: `(input_dim, 1)` sequence.

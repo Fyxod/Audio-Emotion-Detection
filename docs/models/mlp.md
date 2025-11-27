@@ -11,6 +11,12 @@ A dense feed-forward network that treats every engineered acoustic descriptor as
 - Consumes the 110-dimensional feature vector produced by `AudioProcessor.extract_features` (MFCCs, delta MFCCs, chroma, spectral contrast, tonnetz, zero-crossing rate, RMS, spectral centroid, spectral rolloff).
 - Features are standardized with `StandardScaler` fit on the training split and persisted at `models/scaler.pkl`.
 
+## Feature Set & Selection
+
+- **Count:** 110 scalar descriptors per utterance.
+- **Composition:** Means and standard deviations for MFCCs/ΔMFCCs, chroma, spectral contrast, tonnetz, plus aggregate ZCR, RMS, centroid, and rolloff statistics.
+- **Selection process:** All engineered features emitted by `AudioProcessor` are retained; no additional ranking or dimensionality reduction is applied so the MLP consumes the full handcrafted representation.
+
 ## Architecture
 
 - Input layer: `input_dim` neurons (one per engineered feature).

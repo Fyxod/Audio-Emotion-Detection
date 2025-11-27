@@ -11,6 +11,12 @@ Provides a lighter recurrent alternative to the LSTM while retaining gating mech
 - 110 standardized features reshaped to `(features, 1)`.
 - Derived from MFCC/chroma/contrast/tonnetz/ZCR/RMS/spectral stats via `AudioProcessor`.
 
+## Feature Set & Selection
+
+- **Count:** 110 sequential descriptors supplied to the GRU.
+- **Composition:** Paired means/stds for MFCCs and ΔMFCCs, chroma, spectral contrast, tonnetz, alongside standalone ZCR, RMS, centroid, and rolloff metrics.
+- **Selection process:** The GRU consumes the full engineered feature bank without ranking or dimensionality reduction, mirroring the training-time `AudioProcessor` output exactly.
+
 ## Architecture
 
 - GRU 128 units with `return_sequences=True` → Dropout 0.3.

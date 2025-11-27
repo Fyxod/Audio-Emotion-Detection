@@ -19,6 +19,7 @@ class AudioProcessor:
             '08': 'surprised'
         }
 
+
     def extract_features(self, audio_path: str) -> np.ndarray:
         """Extract features from audio file (matches notebook)."""
         audio, sr = librosa.load(audio_path, sr=self.sample_rate)

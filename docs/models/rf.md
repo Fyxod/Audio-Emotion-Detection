@@ -11,6 +11,12 @@ Classical ensemble baseline that aggregates predictions from multiple decision t
 - Directly consumes the 110-dimensional standardized feature vectors output by `AudioProcessor`.
 - No reshaping required; scaling handled via `models/scaler.pkl`.
 
+## Feature Set & Selection
+
+- **Count:** 110 handcrafted descriptors.
+- **Composition:** MFCC/ΔMFCC means & stds, chroma energy stats, spectral contrast, tonnetz, and holistic metrics (ZCR, RMS, centroid, rolloff).
+- **Selection process:** Random Forest leverages the complete feature set; tree-based split criteria inherently explore feature importance without prior ranking, so no external feature selection is performed.
+
 ## Configuration
 
 - `RandomForestClassifier` with 200 estimators.

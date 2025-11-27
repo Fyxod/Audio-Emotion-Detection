@@ -12,6 +12,12 @@ Captures local temporal patterns in the engineered feature sequences by sliding 
 - Same feature inventory as documented in `AudioProcessor`: MFCC/ΔMFCC statistics, chroma, spectral contrast, tonnetz, ZCR, RMS, centroid, rolloff.
 - Standardized with the shared scaler at `models/scaler.pkl`.
 
+## Feature Set & Selection
+
+- **Count:** 110 sequence steps (feature channels) per sample.
+- **Composition:** Paired means/stds for MFCCs and ΔMFCCs, chroma, contrast, tonnetz, plus single-value global descriptors (ZCR, RMS, centroid, rolloff).
+- **Selection process:** The CNN ingests the entire engineered vector in its original ordering; there is no feature ranking or pruning so kernels learn over the full handcrafted manifold.
+
 ## Architecture
 
 - Input: `(input_dim, 1)` tensor.

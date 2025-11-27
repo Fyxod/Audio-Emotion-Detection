@@ -11,6 +11,12 @@ Sequential ensemble of shallow decision trees optimized via gradient boosting. C
 - 110 standardized descriptors (MFCC statistics, chroma, spectral features, etc.).
 - Consumes flattened vectors; no reshaping.
 
+## Feature Set & Selection
+
+- **Count:** 110 handcrafted attributes per utterance.
+- **Composition:** Means/stds of MFCCs and ΔMFCCs, chroma, spectral contrast, tonnetz, supported by scalar ZCR, RMS, centroid, and rolloff features.
+- **Selection process:** Gradient Boosting ingests the full engineered set; no pre-selection is applied because boosting inherently learns feature importance through split gains.
+
 ## Configuration
 
 - `GradientBoostingClassifier` with:

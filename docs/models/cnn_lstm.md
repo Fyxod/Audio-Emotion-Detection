@@ -11,6 +11,12 @@ Combines convolutional feature extraction with recurrent temporal modeling. The 
 - 110 standardized engineered features reshaped to `(features, 1)`.
 - Feature sources: MFCC & deltas, chroma, spectral contrast, tonnetz, ZCR, RMS, spectral centroid, spectral rolloff.
 
+## Feature Set & Selection
+
+- **Count:** 110 ordered descriptors per clip.
+- **Composition:** Mean/std statistics for MFCCs, ΔMFCCs, chroma, spectral contrast, tonnetz, plus singleton ZCR, RMS, centroid, and rolloff measures.
+- **Selection process:** The hybrid network receives the untouched feature vector from `AudioProcessor`; no feature elimination or ranking is performed so convolutional and recurrent layers can jointly learn salient patterns.
+
 ## Architecture
 
 - Conv1D 64 filters (kernel 3, ReLU, same padding) → MaxPooling1D (pool=2) → Dropout 0.3.
