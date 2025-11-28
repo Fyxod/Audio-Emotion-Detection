@@ -19,6 +19,17 @@ EPOCHS = 50
 BATCH_SIZE = 32
 
 
+def compute_normalized_weights(member_keys, accuracy_lookup):
+    """Return normalized weights derived from prior accuracies."""
+    accuracies = [accuracy_lookup.get(key) for key in member_keys]
+    if any(acc is None for acc in accuracies):
+        return None
+    total = sum(accuracies)
+    if total == 0:
+        return None
+    return [acc / total for acc in accuracies]
+
+
 def extract_dataset_features(dataset_path: str):
     processor = AudioProcessor()
     X, y = [], []
@@ -108,6 +119,12 @@ def main():
         "gb_svm": (create_gb_svm_ensemble, X_train_scaled, X_test_scaled, False),
     }
 
+    ensemble_members = {
+        "rf_gb_et": ["rf", "gb", "et"],
+        "rf_svm_knn": ["rf", "svm", "knn"],
+        "gb_svm": ["gb", "svm"],
+    }
+
     results = {}
 
     for name, (model_func, X_tr, X_te, is_dl) in models_to_train.items():
@@ -142,7 +159,17 @@ def main():
 
         else:
             # Sklearn Training
-            model = model_func()
+            if name in ensemble_members:
+                weights = compute_normalized_weights(ensemble_members[name], results)
+                if weights is not None:
+                    print(f" Using weights for {name}: {weights}")
+                else:
+                    print(
+                        f" Weights unavailable for {name}. Falling back to uniform voting."
+                    )
+                model = model_func(weights=weights)
+            else:
+                model = model_func()
             model.fit(X_tr, y_train)
             acc = model.score(X_te, y_test)
             save_path = os.path.join(MODELS_DIR, f"{name}_model.pkl")

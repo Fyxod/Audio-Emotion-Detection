@@ -166,30 +166,30 @@ def create_et_model():
 # Ensemble Models (Sklearn)
 
 
-def create_rf_gb_et_ensemble():
-    """Soft-voting ensemble of RF, GB, and Extra Trees."""
+def create_rf_gb_et_ensemble(weights=None):
+    """Soft-voting ensemble of RF, GB, and Extra Trees with optional weights."""
     estimators = [
         ("rf", create_rf_model()),
         ("gb", create_gb_model()),
         ("et", create_et_model()),
     ]
-    return VotingClassifier(estimators=estimators, voting="soft")
+    return VotingClassifier(estimators=estimators, voting="soft", weights=weights)
 
 
-def create_rf_svm_knn_ensemble():
-    """Soft-voting ensemble of RF, SVM, and KNN."""
+def create_rf_svm_knn_ensemble(weights=None):
+    """Soft-voting ensemble of RF, SVM, and KNN with optional weights."""
     estimators = [
         ("rf", create_rf_model()),
         ("svm", create_svm_model()),
         ("knn", create_knn_model()),
     ]
-    return VotingClassifier(estimators=estimators, voting="soft")
+    return VotingClassifier(estimators=estimators, voting="soft", weights=weights)
 
 
-def create_gb_svm_ensemble():
-    """Soft-voting ensemble of GB and SVM."""
+def create_gb_svm_ensemble(weights=None):
+    """Soft-voting ensemble of GB and SVM with optional weights."""
     estimators = [
         ("gb", create_gb_model()),
         ("svm", create_svm_model()),
     ]
-    return VotingClassifier(estimators=estimators, voting="soft")
+    return VotingClassifier(estimators=estimators, voting="soft", weights=weights)
